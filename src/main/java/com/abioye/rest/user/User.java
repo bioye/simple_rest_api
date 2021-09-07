@@ -41,6 +41,14 @@ public class User {
     return true;
   }
 
+  public Role getRole() {
+    return role;
+  }
+
+  public Status getStatus() {
+    return status;
+  }
+
   public String getTitle() {
     return title;
   }
@@ -85,14 +93,8 @@ public class User {
     return id;
   }
 
-  enum Role {
-    USER, ADMIN
-  }
-
-  enum Status {
-    REGISTERED, VERIFIED, DEACTIVATED
-  }
-
+  private Role role;
+  private Status status;
   private String title;
   private String firstName;
   private String lastName;
@@ -104,4 +106,12 @@ public class User {
   private LocalDate dateVerified;
   private LocalDate dateDeactivated;
   private @Id @GeneratedValue Long id;
+
+  enum Role {
+    USER, ADMIN
+  }
+
+  enum Status {
+    REGISTERED, VERIFIED, DEACTIVATED
+  }
 }
