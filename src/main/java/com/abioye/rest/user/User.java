@@ -93,6 +93,58 @@ public class User {
     return id;
   }
 
+  public void setRole(Role role) {
+    this.role = role;
+  }
+
+  public void setStatus(Status status) {
+    this.status = status;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public void setMobile(String mobile) {
+    this.mobile = mobile;
+  }
+
+  public void setPassword(char[] password) {
+    this.password = password;
+  }
+
+  public void setVerified(boolean verified) {
+    this.verified = verified;
+  }
+
+  public void setDateRegistered(LocalDate dateRegistered) {
+    this.dateRegistered = dateRegistered;
+  }
+
+  public void setDateVerified(LocalDate dateVerified) {
+    this.dateVerified = dateVerified;
+  }
+
+  public void setDateDeactivated(LocalDate dateDeactivated) {
+    this.dateDeactivated = dateDeactivated;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
   private Role role;
   private Status status;
   private String title;
@@ -101,8 +153,8 @@ public class User {
   private String email;
   private String mobile;
   private char[] password;
-  private LocalDate dateRegistered;
   private boolean verified;
+  private LocalDate dateRegistered;
   private LocalDate dateVerified;
   private LocalDate dateDeactivated;
   private @Id @GeneratedValue Long id;
