@@ -1,4 +1,4 @@
-package com.abioye.rest;
+package com.abioye.rest.user;
 
 import java.time.LocalDate;
 
