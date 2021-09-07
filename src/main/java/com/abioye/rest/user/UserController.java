@@ -63,4 +63,10 @@ class UserController{
       throw new UserNotFoundException(id);
   }
 
+  @GetMapping("/api/users/{id}")
+  User getOne(@PathVariable Long id){
+    return repository.findById(id)
+      .orElseThrow(() -> new UserNotFoundException(id));
+  }
+
 }
