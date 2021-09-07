@@ -22,7 +22,7 @@ public class V2__InsertRandomUsers extends BaseJavaMigration{
     for (int i = 0; i <= 10; i++) {
       jdbcTemplate.execute(String.format("insert into `sample_user`" 
       + " (`username`, `first_name`, `last_name`) values" 
-      + " ('%d@abioye.com', 'Fela_%d', 'Kuti_%d')", i, i, i));
+      + " ('%d@mailinator.com', 'Fela_%d', 'Kuti_%d')", i, i, i));
     }
   }
 }

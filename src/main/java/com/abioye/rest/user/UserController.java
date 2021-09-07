@@ -1,5 +1,6 @@
 package com.abioye.rest.user;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,20 +14,45 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 class UserController{
-  private final UserRepository repository;
+}
 
-  public UserController(UserRepository repository) {
-    this.repository = repository;
-  }
-
-  @PostMapping("/api/user")
-  User registerUser(@RequestBody User newUser){
-    return repository.save(newUser);
-  }
+@GetMapping("/api/users/{id}")
+User getOne(@PathVariable Long id){
+  return repository.findById(id)
+    .orElseThrow(() -> new UserNotFoundException(id));
+}
 
   @GetMapping("/api/users")
-  List<User> getAll(){
+  Iterable<User> getAll(){
     return repository.findAll();
+
+  @PatchMapping("/api/users/{id}/verify")
+  void verifyUser(@PathVariable Long id){
+    
+    Optional<User> user = repository.findById(id);
+    if (user.isPresent()){
+      User existsUser = user.get();
+      existsUser.verify();
+      repository.save(existsUser);
+    }
+    else{
+      throw new UserNotFoundException(id);
+    }
+  }
+
+  @PatchMapping("/api/users/{id}")
+  void deleteUser(@PathVariable Long id){
+    
+    Optional<User> user = repository.findById(id);
+    if (user.isPresent()){
+      User existsUser = user.get();
+      existsUser.setStatus(User.Status.DEACTIVATED);
+      existsUser.setDateDeactivated(LocalDate.now());
+      repository.save(existsUser);
+    }
+    else{
+      throw new UserNotFoundException(id);
+    }
   }
 
   @PutMapping("api/user/{id}")
@@ -39,12 +65,7 @@ class UserController{
         user.setEmail(newUser.getEmail());
         user.setMobile(newUser.getMobile());
         user.setRole(newUser.getRole());
-        user.setStatus(newUser.getStatus());
-        user.setPassword(newUser.getPassword());//
-        user.setVerified(newUser.isVerified());
-        user.setDateRegistered(newUser.getDateRegistered());
-        user.setDateVerified(newUser.getDateVerified());
-        user.setDateDeactivated(newUser.getDateDeactivated());
+        repository.save(user);
         return user;
       })
     .orElseGet(() -> {
@@ -53,20 +74,22 @@ class UserController{
     });
   }
 
-  @PatchMapping("/api/users/{id}")
-  void deleteUser(@PathVariable Long id){
-    
-    Optional<User> user = repository.findById(id);
-    if (user.isPresent())
-      user.get().setStatus(User.Status.DEACTIVATED);
-    else  
-      throw new UserNotFoundException(id);
+  @PostMapping("/api/user")
+  User registerUser(@RequestBody User newUser){
+    User preparedUser = new User(
+      newUser.getRole(), 
+      newUser.getTitle(), 
+      newUser.getFirstName(), 
+      newUser.getLastName(),
+      newUser.getEmail(),
+      newUser.getMobile(),
+      newUser.getPassword());
+    return repository.save(preparedUser);
   }
 
-  @GetMapping("/api/users/{id}")
-  User getOne(@PathVariable Long id){
-    return repository.findById(id)
-      .orElseThrow(() -> new UserNotFoundException(id));
+  public UserController(UserRepository repository) {
+    this.repository = repository;
   }
 
+  private final UserRepository repository;
 }

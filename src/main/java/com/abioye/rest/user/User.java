@@ -6,6 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import org.springframework.data.annotation.CreatedDate;
+
 @Entity
 public class User {
 
@@ -41,6 +45,22 @@ public class User {
     return true;
   }
 
+  public User(Role role, String title, String firstName, String lastName, String email, String mobile,
+      char[] password) {
+    this.role = role;
+    this.title = title;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.mobile = mobile;
+    this.password = password;
+    this.status = User.Status.REGISTERED;
+    this.dateRegistered = LocalDate.now();
+  }
+
+  public User() {
+  }
+
   public Role getRole() {
     return role;
   }
@@ -73,6 +93,7 @@ public class User {
     return password;
   }
 
+  //@CreatedDate
   public LocalDate getDateRegistered() {
     return dateRegistered;
   }
@@ -143,6 +164,12 @@ public class User {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  void verify() {
+    setStatus(User.Status.VERIFIED);
+    setVerified(true);
+    setDateVerified(LocalDate.now());
   }
 
   private Role role;
