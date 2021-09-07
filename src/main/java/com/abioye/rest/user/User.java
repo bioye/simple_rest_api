@@ -11,9 +11,9 @@ public class User {
 
   @Override
   public String toString() {
-    return "User [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email 
-        + ", mobile=" + mobile + ", title=" + title + ", dateRegistered=" + dateRegistered + ", dateVerified="
-        + dateVerified + ", dateDeactivated=" + dateDeactivated + ", verified=" + verified + "]";
+    return "User [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", mobile=" + mobile
+        + ", title=" + title + ", dateRegistered=" + dateRegistered + ", dateVerified=" + dateVerified
+        + ", dateDeactivated=" + dateDeactivated + ", verified=" + verified + "]";
   }
 
   @Override
