@@ -622,3 +622,12 @@ Caused by: java.lang.IllegalStateException: The file is locked: nio:/Users/abioy
 	at org.h2.mvstore.FileStore.open(FileStore.java:172)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:381)
 	... 139 more
+2021-09-08 14:55:42 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SAMPLE_USER" already exists; SQL statement:
+CREATE TABLE `sample_user`(`id` INT AUTO_INCREMENT,`username` VARCHAR(255) NOT NULL UNIQUE,`first_name` VARCHAR(255) NOT NULL,`last_name` VARCHAR(255) NOT NULL,PRIMARY KEY (`id`)); [42101-200]
+2021-09-08 15:44:59 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE TABLE[*] IF EXISTS SAMPLE_USER"; expected "identifier"; SQL statement:
+DELETE TABLE IF EXISTS SAMPLE_USER [42001-200]
+2021-09-08 15:45:09 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE TABLE[*] IF EXISTS `SAMPLE_USER`"; expected "identifier"; SQL statement:
+DELETE TABLE IF EXISTS `SAMPLE_USER` [42001-200]

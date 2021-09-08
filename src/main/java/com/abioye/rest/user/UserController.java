@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import javax.mail.MessagingException;
 
-import com.abioye.rest.EmailClient;
+import com.abioye.rest.MailingHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -45,7 +45,7 @@ User getOne(@PathVariable Long id){
       User existsUser = user.get();
       existsUser.verify();
       repository.save(existsUser);
-      EmailClient.sendVerifiedEmail(emailSender, existsUser.getEmail());
+      MailingHelper.sendVerifiedEmail(emailSender, existsUser.getEmail());
     }
     else{
       throw new UserNotFoundException(id);
@@ -61,7 +61,7 @@ User getOne(@PathVariable Long id){
       existsUser.setStatus(User.Status.DEACTIVATED);
       existsUser.setDateDeactivated(LocalDate.now());
       repository.save(existsUser);
-      EmailClient.sendDeactivatedEmail(emailSender, existsUser.getEmail());
+      MailingHelper.sendDeactivatedEmail(emailSender, existsUser.getEmail());
     }
     else{
       throw new UserNotFoundException(id);
@@ -101,7 +101,7 @@ User getOne(@PathVariable Long id){
       encryptedPassword.toCharArray());
 
       preparedUser = repository.save(preparedUser);
-    EmailClient.sendRegisteredEmail(emailSender, preparedUser.getId(), email);
+    MailingHelper.sendRegisteredEmail(emailSender, preparedUser.getId(), email);
     return preparedUser;
   }
 

@@ -7,9 +7,14 @@ plugins {
 }
 
 flyway{
-  url = 'jdbc:h2:mem:simplerestdb'
-  user = 'sa'
-  password = 'password'
+  //url = 'jdbc:h2:mem:simplerestdb'
+  //user = 'sa'
+  //password = 'password'
+  outOfOrder = true
+  ignorePendingMigrations=true
+  validateOnMigrate=false
+  cleanOnValidationError=true
+  ignoreMissingMigrations=true
   //locations = ['classpath:db/migration','filesystem:./sql']
 }
 
