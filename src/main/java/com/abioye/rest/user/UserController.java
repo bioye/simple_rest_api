@@ -3,6 +3,7 @@ package com.abioye.rest.user;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,6 +76,7 @@ User getOne(@PathVariable Long id){
 
   @PostMapping("/api/user")
   User registerUser(@RequestBody User newUser){
+    String encryptedPassword = new BCryptPasswordEncoder().encode(new String(newUser.getPassword()));
     User preparedUser = new User(
       newUser.getRole(), 
       newUser.getTitle(), 
@@ -82,7 +84,7 @@ User getOne(@PathVariable Long id){
       newUser.getLastName(),
       newUser.getEmail(),
       newUser.getMobile(),
-      newUser.getPassword());
+      encryptedPassword.toCharArray());
     return repository.save(preparedUser);
   }
 
