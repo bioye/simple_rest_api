@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class User {
 
@@ -175,6 +177,7 @@ public class User {
   private String lastName;
   private String email;
   private String mobile;
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private char[] password;
   private boolean verified;
   private LocalDate dateRegistered;
