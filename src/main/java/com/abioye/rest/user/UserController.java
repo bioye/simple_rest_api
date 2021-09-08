@@ -3,6 +3,12 @@ package com.abioye.rest.user;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
+
+import com.abioye.rest.EmailClient;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,7 +32,7 @@ User getOne(@PathVariable Long id){
     return repository.findAll();
   }
 
-  @PatchMapping("/api/users/{id}/verify")
+  @GetMapping("/api/users/{id}/verify")
   void verifyUser(@PathVariable Long id){
     
     Optional<User> user = repository.findById(id);
@@ -75,22 +81,33 @@ User getOne(@PathVariable Long id){
   }
 
   @PostMapping("/api/user")
-  User registerUser(@RequestBody User newUser){
+  User registerUser(@RequestBody User newUser) throws MessagingException{
     String encryptedPassword = new BCryptPasswordEncoder().encode(new String(newUser.getPassword()));
+    String email = newUser.getEmail();
     User preparedUser = new User(
       newUser.getRole(), 
       newUser.getTitle(), 
       newUser.getFirstName(), 
       newUser.getLastName(),
-      newUser.getEmail(),
+      email,
       newUser.getMobile(),
       encryptedPassword.toCharArray());
-    return repository.save(preparedUser);
+      preparedUser = repository.save(preparedUser);
+      sendMail(preparedUser.getId(), email);
+    return preparedUser;
   }
 
   public UserController(UserRepository repository) {
     this.repository = repository;
   }
+
+  private void sendMail(long id, String to) throws MessagingException{
+    String text = "<a href=\"http://localhost:8080/api/users/"+ id +"/verify\">Verify Me</a>";
+    new EmailClient().sendSimpleMessage(emailSender, to, text);
+  }
+
+  @Autowired
+  private JavaMailSender emailSender;
 
   private final UserRepository repository;
 }
