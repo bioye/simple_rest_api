@@ -6,14 +6,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+
 @Entity
 public class User {
 
   @Override
   public String toString() {
-    return "User [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email 
-        + ", mobile=" + mobile + ", title=" + title + ", dateRegistered=" + dateRegistered + ", dateVerified="
-        + dateVerified + ", dateDeactivated=" + dateDeactivated + ", verified=" + verified + "]";
+    return "User [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", mobile=" + mobile
+        + ", title=" + title + ", dateRegistered=" + dateRegistered + ", dateVerified=" + dateVerified
+        + ", dateDeactivated=" + dateDeactivated + ", verified=" + verified + "]";
   }
 
   @Override
@@ -41,6 +42,30 @@ public class User {
     return true;
   }
 
+  public User(Role role, String title, String firstName, String lastName, String email, String mobile,
+      char[] password) {
+    this.role = role;
+    this.title = title;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.mobile = mobile;
+    this.password = password;
+    this.status = User.Status.REGISTERED;
+    this.dateRegistered = LocalDate.now();
+  }
+
+  public User() {
+  }
+
+  public Role getRole() {
+    return role;
+  }
+
+  public Status getStatus() {
+    return status;
+  }
+
   public String getTitle() {
     return title;
   }
@@ -64,7 +89,6 @@ public class User {
   public char[] getPassword() {
     return password;
   }
-
   public LocalDate getDateRegistered() {
     return dateRegistered;
   }
@@ -84,7 +108,6 @@ public class User {
   public Long getId() {
     return id;
   }
-
   enum Role {
     USER, ADMIN
   }
@@ -93,6 +116,66 @@ public class User {
     REGISTERED, VERIFIED, DEACTIVATED
   }
 
+  public void setRole(Role role) {
+    this.role = role;
+  }
+
+  public void setStatus(Status status) {
+    this.status = status;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public void setMobile(String mobile) {
+    this.mobile = mobile;
+  }
+
+  public void setPassword(char[] password) {
+    this.password = password;
+  }
+
+  public void setVerified(boolean verified) {
+    this.verified = verified;
+  }
+
+  public void setDateRegistered(LocalDate dateRegistered) {
+    this.dateRegistered = dateRegistered;
+  }
+
+  public void setDateVerified(LocalDate dateVerified) {
+    this.dateVerified = dateVerified;
+  }
+
+  public void setDateDeactivated(LocalDate dateDeactivated) {
+    this.dateDeactivated = dateDeactivated;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  void verify() {
+    setStatus(User.Status.VERIFIED);
+    setVerified(true);
+    setDateVerified(LocalDate.now());
+  }
+
+  private Role role;
+  private Status status;
   private String title;
   private String firstName;
   private String lastName;
