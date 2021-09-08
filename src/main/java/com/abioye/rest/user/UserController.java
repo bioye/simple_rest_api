@@ -33,13 +33,14 @@ User getOne(@PathVariable Long id){
   }
 
   @GetMapping("/api/users/{id}/verify")
-  void verifyUser(@PathVariable Long id){
+  void verifyUser(@PathVariable Long id) throws MessagingException{
     
     Optional<User> user = repository.findById(id);
     if (user.isPresent()){
       User existsUser = user.get();
       existsUser.verify();
       repository.save(existsUser);
+      EmailClient.sendVerifiedEmail(emailSender, existsUser.getEmail());
     }
     else{
       throw new UserNotFoundException(id);
@@ -47,7 +48,7 @@ User getOne(@PathVariable Long id){
   }
 
   @PatchMapping("/api/users/{id}")
-  void deleteUser(@PathVariable Long id){
+  void deleteUser(@PathVariable Long id) throws MessagingException{
     
     Optional<User> user = repository.findById(id);
     if (user.isPresent()){
@@ -55,6 +56,7 @@ User getOne(@PathVariable Long id){
       existsUser.setStatus(User.Status.DEACTIVATED);
       existsUser.setDateDeactivated(LocalDate.now());
       repository.save(existsUser);
+      EmailClient.sendDeactivatedEmail(emailSender, existsUser.getEmail());
     }
     else{
       throw new UserNotFoundException(id);
@@ -92,18 +94,14 @@ User getOne(@PathVariable Long id){
       email,
       newUser.getMobile(),
       encryptedPassword.toCharArray());
+
       preparedUser = repository.save(preparedUser);
-      sendMail(preparedUser.getId(), email);
+    EmailClient.sendRegisteredEmail(emailSender, preparedUser.getId(), email);
     return preparedUser;
   }
 
   public UserController(UserRepository repository) {
     this.repository = repository;
-  }
-
-  private void sendMail(long id, String to) throws MessagingException{
-    String text = "<a href=\"http://localhost:8080/api/users/"+ id +"/verify\">Verify Me</a>";
-    new EmailClient().sendSimpleMessage(emailSender, to, text);
   }
 
   @Autowired
