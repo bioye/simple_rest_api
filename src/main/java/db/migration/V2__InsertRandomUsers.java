@@ -11,17 +11,17 @@ public class V2__InsertRandomUsers extends BaseJavaMigration{
     final JdbcTemplate jdbcTemplate = new JdbcTemplate(
       new SingleConnectionDataSource(context.getConnection(), true));
 
-    jdbcTemplate.execute(String.format("CREATE TABLE `sample_user`"
-      + "(`id` INT AUTO_INCREMENT,"
-      + "`username` VARCHAR(255) NOT NULL UNIQUE,"
-      + "`first_name` VARCHAR(255) NOT NULL,"
-      + "`last_name` VARCHAR(255) NOT NULL,"
-      + "PRIMARY KEY (`id`)"
+    jdbcTemplate.execute(String.format("CREATE TABLE sample_user"
+      + "(id INT AUTO_INCREMENT,"
+      + "usernam` VARCHAR(255) NOT NULL UNIQUE,"
+      + "first_name VARCHAR(255) NOT NULL,"
+      + "last_name VARCHAR(255) NOT NULL,"
+      + "PRIMARY KEY (id)"
       + ");"));
 
     for (int i = 0; i <= 10; i++) {
-      jdbcTemplate.execute(String.format("insert into `sample_user`" 
-      + " (`username`, `first_name`, `last_name`) values" 
+      jdbcTemplate.execute(String.format("insert into sample_user" 
+      + " (username, first_name, last_name) values" 
       + " ('%d@mailinator.com', 'Fela_%d', 'Kuti_%d')", i, i, i));
     }
   }

@@ -1,11 +1,9 @@
 package com.abioye.rest.user;
 
 import java.time.LocalDate;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -18,6 +16,7 @@ public class User {
   private String lastName;
   private String email;
   private String mobile;
+  
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private char[] password;
   private boolean verified;
@@ -25,14 +24,6 @@ public class User {
   private LocalDate dateVerified;
   private LocalDate dateDeactivated;
   private @Id @GeneratedValue Long id;
-
-  enum Role {
-    USER, ADMIN
-  }
-
-  enum Status {
-    REGISTERED, VERIFIED, DEACTIVATED
-  }
 
   @Override
   public String toString() {
@@ -75,7 +66,7 @@ public class User {
     this.email = email;
     this.mobile = mobile;
     this.password = password;
-    this.status = User.Status.REGISTERED;
+    this.status = Status.REGISTERED;
     this.dateRegistered = LocalDate.now();
   }
 
@@ -114,7 +105,7 @@ public class User {
     return password;
   }
 
-  //@CreatedDate
+  // @CreatedDate
   public LocalDate getDateRegistered() {
     return dateRegistered;
   }
@@ -188,7 +179,7 @@ public class User {
   }
 
   void verify() {
-    setStatus(User.Status.VERIFIED);
+    setStatus(Status.VERIFIED);
     setVerified(true);
     setDateVerified(LocalDate.now());
   }

@@ -2,11 +2,7 @@ package com.abioye.rest.user;
 
 import java.time.LocalDate;
 import java.util.Optional;
-
 import javax.mail.MessagingException;
-
-import com.abioye.rest.MailingHelper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,90 +13,84 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.abioye.rest.MailingHelper;
 
 @RestController
-class UserController{
+class UserController {
 
   @Autowired
   private JavaMailSender emailSender;
 
   private final UserRepository repository;
 
-@GetMapping("/api/users/{id}")
-User getOne(@PathVariable Long id){
-  return repository.findById(id)
-    .orElseThrow(() -> new UserNotFoundException(id));
-}
+  @GetMapping("/api/users/{id}")
+  public User getOne(@PathVariable Long id) {
+    return repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+  }
 
   @GetMapping("/api/users")
-  Iterable<User> getAll(){
+  public Iterable<User> getAll() {
     return repository.findAll();
   }
 
   @GetMapping("/api/users/{id}/verify")
-  void verifyUser(@PathVariable Long id) throws MessagingException{
-    
+  public void verifyUser(@PathVariable final Long id) {
+
     Optional<User> user = repository.findById(id);
-    if (user.isPresent()){
+    if (user.isPresent()) {
       User existsUser = user.get();
       existsUser.verify();
       repository.save(existsUser);
       MailingHelper.sendVerifiedEmail(emailSender, existsUser.getEmail());
-    }
-    else{
+    } else {
       throw new UserNotFoundException(id);
     }
   }
 
   @PatchMapping("/api/users/{id}")
-  void deleteUser(@PathVariable Long id) throws MessagingException{
-    
+  public void deleteUser(@PathVariable Long id) {
+
     Optional<User> user = repository.findById(id);
-    if (user.isPresent()){
+    if (user.isPresent()) {
       User existsUser = user.get();
-      existsUser.setStatus(User.Status.DEACTIVATED);
+      existsUser.setStatus(Status.DEACTIVATED);
       existsUser.setDateDeactivated(LocalDate.now());
       repository.save(existsUser);
       MailingHelper.sendDeactivatedEmail(emailSender, existsUser.getEmail());
-    }
-    else{
+    } else {
       throw new UserNotFoundException(id);
     }
   }
 
   @PutMapping("api/user/{id}")
-  User updateUser(@RequestBody User newUser, @PathVariable Long id){
-    return repository.findById(id)
-      .map(user -> {
-        user.setTitle(newUser.getTitle());
-        user.setFirstName(newUser.getFirstName());
-        user.setLastName(newUser.getLastName());
-        user.setEmail(newUser.getEmail());
-        user.setMobile(newUser.getMobile());
-        user.setRole(newUser.getRole());
-        repository.save(user);
-        return user;
-      })
-    .orElseGet(() -> {
-      newUser.setId(id);
-      return repository.save(newUser);
+  public User updateUser(@RequestBody UserDTO newUserDto, @PathVariable Long id) {
+    return repository.findById(id).map(user -> {
+      user.setTitle(newUserDto.getTitle());
+      user.setFirstName(newUserDto.getFirstName());
+      user.setLastName(newUserDto.getLastName());
+      user.setEmail(newUserDto.getEmail());
+      user.setMobile(newUserDto.getMobile());
+      user.setRole(newUserDto.getRole());
+      repository.save(user);
+      return user;
+    }).orElseGet(() -> {
+      User freshUser = new User();
+      freshUser.setId(id);
+      return repository.save(freshUser);
     });
   }
 
   @PostMapping("/api/user")
-  User registerUser(@RequestBody User newUser) throws MessagingException{
-    String encryptedPassword = new BCryptPasswordEncoder().encode(new String(newUser.getPassword()));
-    String email = newUser.getEmail();
+  public User registerUser(@RequestBody final UserDTO newUserDto) throws MessagingException {
+    final String encryptedPassword = new BCryptPasswordEncoder()
+      .encode(new String(newUserDto.getPassword()));
+    final String email = newUserDto.getEmail();
     User preparedUser = new User(
-      newUser.getRole(), 
-      newUser.getTitle(), 
-      newUser.getFirstName(), 
-      newUser.getLastName(),
-      email,
-      newUser.getMobile(),
-      encryptedPassword.toCharArray());
+      newUserDto.getRole(), newUserDto.getTitle(), 
+      newUserDto.getFirstName(), newUserDto.getLastName(),
+      email, newUserDto.getMobile(), encryptedPassword.toCharArray());
 
-      preparedUser = repository.save(preparedUser);
+    preparedUser = repository.save(preparedUser);
     MailingHelper.sendRegisteredEmail(emailSender, preparedUser.getId(), email);
     return preparedUser;
   }

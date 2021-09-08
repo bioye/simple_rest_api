@@ -7,15 +7,11 @@ plugins {
 }
 
 flyway{
-  //url = 'jdbc:h2:mem:simplerestdb'
-  //user = 'sa'
-  //password = 'password'
   outOfOrder = true
   ignorePendingMigrations=true
   validateOnMigrate=false
   cleanOnValidationError=true
   ignoreMissingMigrations=true
-  //locations = ['classpath:db/migration','filesystem:./sql']
 }
 
 group = 'com.abioye'
@@ -31,7 +27,7 @@ ext {
 }
 
 dependencies {
-	//implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
