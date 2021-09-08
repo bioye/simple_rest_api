@@ -13,7 +13,7 @@ public class V2__InsertRandomUsers extends BaseJavaMigration{
 
     jdbcTemplate.execute(String.format("CREATE TABLE sample_user"
       + "(id INT AUTO_INCREMENT,"
-      + "usernam` VARCHAR(255) NOT NULL UNIQUE,"
+      + "username VARCHAR(255) NOT NULL UNIQUE,"
       + "first_name VARCHAR(255) NOT NULL,"
       + "last_name VARCHAR(255) NOT NULL,"
       + "PRIMARY KEY (id)"

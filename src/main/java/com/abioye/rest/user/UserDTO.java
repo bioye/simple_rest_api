@@ -2,19 +2,30 @@ package com.abioye.rest.user;
 
 import java.time.LocalDate;
 
-public class UserDTO {
+public final class UserDTO {
 
   private Role role;
+  
   private Status status;
+  
   private String title;
+
   private String firstName;
+
   private String lastName;
+
   private String email;
+
   private String mobile;
+
   private boolean verified;
+
   private LocalDate dateRegistered;
+
   private LocalDate dateVerified;
+
   private LocalDate dateDeactivated;
+
   private char[] password;
 
   public Role getRole() {
@@ -111,6 +122,9 @@ public class UserDTO {
 
   public void setPassword(char[] password) {
     this.password = password;
+  }
+
+  public UserDTO() {
   }
 
 }

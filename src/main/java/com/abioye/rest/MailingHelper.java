@@ -15,7 +15,7 @@ public final class MailingHelper {
   private MailingHelper() {
   }
 
-  public static void sendVerifiedEmail(final JavaMailSender emailSender, String to) {
+  public static void sendVerifiedEmail(final JavaMailSender emailSender, final String to) {
     final SimpleMailMessage message = new SimpleMailMessage();
     message.setText("Congrats! You have been verified.");
     message.setFrom(EMAIL_FROM);
@@ -25,7 +25,7 @@ public final class MailingHelper {
   }
 
   public static void sendDeactivatedEmail(final JavaMailSender emailSender, String to) {
-    SimpleMailMessage message = new SimpleMailMessage();
+    final SimpleMailMessage message = new SimpleMailMessage();
     message.setText("Your account has been deactivated.");
     message.setFrom(EMAIL_FROM);
     message.setTo(to);
@@ -33,10 +33,10 @@ public final class MailingHelper {
     emailSender.send(message);
   }
 
-  public static void sendRegisteredEmail(final JavaMailSender emailSender, long id, String to)
+  public static void sendRegisteredEmail(final JavaMailSender emailSender, final long id, final String to)
       throws MessagingException {
     final MimeMessage mimeMessage = emailSender.createMimeMessage();
-    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+    final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
     final String html = "<a href=\"http://localhost:8080/api/users/" + id + "/verify\">Verify Me</a>";
     helper.setText(html, true);
     helper.setFrom(EMAIL_FROM);
