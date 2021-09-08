@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 class UserController{
-}
 
 @GetMapping("/api/users/{id}")
 User getOne(@PathVariable Long id){
@@ -25,6 +24,7 @@ User getOne(@PathVariable Long id){
   @GetMapping("/api/users")
   Iterable<User> getAll(){
     return repository.findAll();
+  }
 
   @PatchMapping("/api/users/{id}/verify")
   void verifyUser(@PathVariable Long id){
