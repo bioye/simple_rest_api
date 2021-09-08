@@ -1,7 +1,6 @@
 package com.abioye.rest.user;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 class UserController{
-}
 
 @GetMapping("/api/users/{id}")
 User getOne(@PathVariable Long id){
@@ -25,6 +23,7 @@ User getOne(@PathVariable Long id){
   @GetMapping("/api/users")
   Iterable<User> getAll(){
     return repository.findAll();
+  }
 
   @PatchMapping("/api/users/{id}/verify")
   void verifyUser(@PathVariable Long id){
