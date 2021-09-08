@@ -11,6 +11,29 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 public class User {
 
+  private Role role;
+  private Status status;
+  private String title;
+  private String firstName;
+  private String lastName;
+  private String email;
+  private String mobile;
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private char[] password;
+  private boolean verified;
+  private LocalDate dateRegistered;
+  private LocalDate dateVerified;
+  private LocalDate dateDeactivated;
+  private @Id @GeneratedValue Long id;
+
+  enum Role {
+    USER, ADMIN
+  }
+
+  enum Status {
+    REGISTERED, VERIFIED, DEACTIVATED
+  }
+
   @Override
   public String toString() {
     return "User [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", mobile=" + mobile
@@ -168,28 +191,5 @@ public class User {
     setStatus(User.Status.VERIFIED);
     setVerified(true);
     setDateVerified(LocalDate.now());
-  }
-
-  private Role role;
-  private Status status;
-  private String title;
-  private String firstName;
-  private String lastName;
-  private String email;
-  private String mobile;
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  private char[] password;
-  private boolean verified;
-  private LocalDate dateRegistered;
-  private LocalDate dateVerified;
-  private LocalDate dateDeactivated;
-  private @Id @GeneratedValue Long id;
-
-  enum Role {
-    USER, ADMIN
-  }
-
-  enum Status {
-    REGISTERED, VERIFIED, DEACTIVATED
   }
 }

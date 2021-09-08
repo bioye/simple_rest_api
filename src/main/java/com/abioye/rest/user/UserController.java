@@ -21,6 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 class UserController{
 
+  @Autowired
+  private JavaMailSender emailSender;
+
+  private final UserRepository repository;
+
 @GetMapping("/api/users/{id}")
 User getOne(@PathVariable Long id){
   return repository.findById(id)
@@ -103,9 +108,4 @@ User getOne(@PathVariable Long id){
   public UserController(UserRepository repository) {
     this.repository = repository;
   }
-
-  @Autowired
-  private JavaMailSender emailSender;
-
-  private final UserRepository repository;
 }
