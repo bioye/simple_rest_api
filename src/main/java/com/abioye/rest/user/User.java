@@ -6,10 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.springframework.data.annotation.CreatedDate;
-
 @Entity
 public class User {
 
