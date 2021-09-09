@@ -124,7 +124,4 @@ public final class UserDTO {
     this.password = password;
   }
 
-  public UserDTO() {
-  }
-
 }

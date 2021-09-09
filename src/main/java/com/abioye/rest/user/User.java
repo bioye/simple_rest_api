@@ -16,7 +16,7 @@ public class User {
   private String lastName;
   private String email;
   private String mobile;
-  
+
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private char[] password;
   private boolean verified;
@@ -179,8 +179,13 @@ public class User {
   }
 
   void verify() {
-    setStatus(Status.VERIFIED);
-    setVerified(true);
-    setDateVerified(LocalDate.now());
+    status = Status.VERIFIED;
+    verified = true;
+    dateVerified = LocalDate.now();
+  }
+
+  public void deactivate() {
+    status = Status.DEACTIVATED;
+    dateDeactivated = LocalDate.now();
   }
 }
