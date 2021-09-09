@@ -18,8 +18,8 @@ class UserController {
   private UserService userService;
 
   @GetMapping("/api/users/{id}")
-  public User getOne(@PathVariable Long id) throws UserNotFoundException {
-    return userService.getOne(id).orElseThrow(() -> new UserNotFoundException(id));
+  public User getOne(@PathVariable Long id) {
+    return userService.getOne(id);
   }
 
   @GetMapping("/api/users")
@@ -29,16 +29,12 @@ class UserController {
 
   @GetMapping("/api/users/{id}/verify")
   public void verifyUser(@PathVariable final Long id) {
-    if (!userService.verifyUser(id)) {
-      throw new UserNotFoundException(id);
-    }
+    userService.verifyUser(id);
   }
 
   @PatchMapping("/api/users/{id}")
   public void deleteUser(@PathVariable Long id) {
-    if (!userService.deactivateUser(id)) {
-      throw new UserNotFoundException(id);
-    }
+    userService.deactivateUser(id);
   }
 
   @PutMapping("api/user/{id}")

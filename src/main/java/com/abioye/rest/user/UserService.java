@@ -1,12 +1,14 @@
 package com.abioye.rest.user;
 
-import java.time.LocalDate;
 import java.util.Optional;
+
 import javax.mail.MessagingException;
+
+import com.abioye.rest.MailingHelper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.abioye.rest.MailingHelper;
 
 @Service
 public class UserService {
@@ -14,40 +16,41 @@ public class UserService {
   @Autowired
   private UserRepository repository;
 
-  public Optional<User> getOne(Long id) {
-    return repository.findById(id);
+  public User getOne(Long id) {
+    return repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
   }
 
   public Iterable<User> getAll() {
     return repository.findAll();
   }
 
-  public boolean verifyUser(Long id) {
-    Optional<User> user = getOne(id);
+  public void verifyUser(Long id) {
+    Optional<User> user = repository.findById(id);
     if (user.isPresent()) {
       User existsUser = user.get();
       existsUser.verify();
       saveUser(existsUser);
       MailingHelper.sendMail(existsUser.getEmail(), "verified");
-      return true;
+    } else {
+      throw new UserNotFoundException(id);
     }
-    return false;
   }
 
-  public boolean deactivateUser(Long id) {
-    Optional<User> user = getOne(id);
+  public void deactivateUser(Long id) {
+    Optional<User> user = repository.findById(id);
     if (user.isPresent()) {
       User existsUser = user.get();
       existsUser.deactivate();
       repository.save(existsUser);
       MailingHelper.sendMail(existsUser.getEmail(), "deactivated");
-      return true;
     }
-    return false;
+    else{
+      throw new UserNotFoundException(id);
+    }
   }
 
   public User updateUser(UserDTO newUserDto, Long id) {
-    return getOne(id).map(user -> {
+    return repository.findById(id).map(user -> {
       user.setTitle(newUserDto.getTitle());
       user.setFirstName(newUserDto.getFirstName());
       user.setLastName(newUserDto.getLastName());
