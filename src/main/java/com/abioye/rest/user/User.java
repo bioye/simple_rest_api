@@ -70,6 +70,12 @@ public class User {
     this.dateRegistered = LocalDate.now();
   }
 
+  public User(Long id, Role role, String title, String firstName, String lastName, String email, String mobile,
+      char[] password) {
+    this(role, title, firstName, lastName, email, mobile, password);
+    this.id=id;
+  }
+
   public User() {
   }
 

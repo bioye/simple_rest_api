@@ -6,15 +6,17 @@ import javax.mail.MessagingException;
 
 import com.abioye.rest.MailingHelper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-  @Autowired
-  private UserRepository repository;
+  private final UserRepository repository;
+
+  public UserService(UserRepository repository) {
+    this.repository = repository;
+  }
 
   public User getOne(Long id) {
     return repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
